@@ -1,0 +1,1 @@
+/home/tim/ROS/rl_sar_visual/devel/.private/go2_description/lib/pkgconfig/go2_description.pc

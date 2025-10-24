@@ -1,0 +1,12 @@
+[ 12%] [32mBuilding CXX object CMakeFiles/rl_sdk.dir/library/core/rl_sdk/rl_sdk.cpp.o[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/observation_buffer.dir/library/core/observation_buffer/observation_buffer.cpp.o[0m
+[ 37%] [32m[1mLinking CXX shared library /home/tim/ROS/rl_sar_visual/devel/.private/rl_sar/lib/libobservation_buffer.so[0m
+[ 37%] Built target observation_buffer
+[ 50%] [32m[1mLinking CXX shared library /home/tim/ROS/rl_sar_visual/devel/.private/rl_sar/lib/librl_sdk.so[0m
+[ 50%] Built target rl_sdk
+[ 62%] [32mBuilding CXX object CMakeFiles/rl_sim.dir/src/rl_sim.cpp.o[0m
+[ 75%] [32mBuilding CXX object CMakeFiles/rl_real_a1.dir/src/rl_real_a1.cpp.o[0m
+[ 87%] [32m[1mLinking CXX executable /home/tim/ROS/rl_sar_visual/devel/.private/rl_sar/lib/rl_sar/rl_real_a1[0m
+[ 87%] Built target rl_real_a1
+[100%] [32m[1mLinking CXX executable /home/tim/ROS/rl_sar_visual/devel/.private/rl_sar/lib/rl_sar/rl_sim[0m
+[100%] Built target rl_sim

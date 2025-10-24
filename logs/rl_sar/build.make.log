@@ -1,0 +1,4 @@
+[ 25%] Built target observation_buffer
+[ 50%] Built target rl_sdk
+[ 75%] Built target rl_real_a1
+[100%] Built target rl_sim

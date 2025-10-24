@@ -1,0 +1,4 @@
+robots/go2_description
+/home/tim/ROS/rl_sar_visual/devel/.private/go2_description/share/go2_description/cmake/go2_descriptionConfig-version.cmake /home/tim/ROS/rl_sar_visual/devel/share/go2_description/cmake/go2_descriptionConfig-version.cmake
+/home/tim/ROS/rl_sar_visual/devel/.private/go2_description/share/go2_description/cmake/go2_descriptionConfig.cmake /home/tim/ROS/rl_sar_visual/devel/share/go2_description/cmake/go2_descriptionConfig.cmake
+/home/tim/ROS/rl_sar_visual/devel/.private/go2_description/lib/pkgconfig/go2_description.pc /home/tim/ROS/rl_sar_visual/devel/lib/pkgconfig/go2_description.pc

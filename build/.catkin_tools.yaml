@@ -1,0 +1,6 @@
+devel_space: /home/tim/ROS/rl_sar_visual/devel
+install: false
+install_space: /home/tim/ROS/rl_sar_visual/install
+profile: default
+source_space: /home/tim/ROS/rl_sar_visual/src
+workspace: /home/tim/ROS/rl_sar_visual

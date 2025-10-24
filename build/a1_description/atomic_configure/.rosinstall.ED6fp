@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/tim/ROS/rl_sar_visual/devel/.private/a1_description/setup.sh

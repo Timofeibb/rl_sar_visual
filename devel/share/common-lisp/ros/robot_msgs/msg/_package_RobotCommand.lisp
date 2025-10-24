@@ -1,0 +1,1 @@
+/home/tim/ROS/rl_sar_visual/devel/.private/robot_msgs/share/common-lisp/ros/robot_msgs/msg/_package_RobotCommand.lisp

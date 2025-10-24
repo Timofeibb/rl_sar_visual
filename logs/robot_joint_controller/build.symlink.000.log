@@ -1,0 +1,4 @@
+Symlinking /home/tim/ROS/rl_sar_visual/devel/share/robot_joint_controller/cmake/robot_joint_controllerConfig-version.cmake
+Symlinking /home/tim/ROS/rl_sar_visual/devel/share/robot_joint_controller/cmake/robot_joint_controllerConfig.cmake
+Symlinking /home/tim/ROS/rl_sar_visual/devel/lib/librobot_joint_controller.so
+Symlinking /home/tim/ROS/rl_sar_visual/devel/lib/pkgconfig/robot_joint_controller.pc

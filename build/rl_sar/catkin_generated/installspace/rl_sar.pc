@@ -1,0 +1,8 @@
+prefix=/home/tim/ROS/rl_sar_visual/install
+
+Name: rl_sar
+Description: Description of rl_sar
+Version: 3.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: roscpp rospy controller_manager joint_state_controller gazebo_ros std_msgs geometry_msgs std_srvs robot_msgs

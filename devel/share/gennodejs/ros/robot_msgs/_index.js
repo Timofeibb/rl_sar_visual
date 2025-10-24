@@ -1,0 +1,1 @@
+/home/tim/ROS/rl_sar_visual/devel/.private/robot_msgs/share/gennodejs/ros/robot_msgs/_index.js

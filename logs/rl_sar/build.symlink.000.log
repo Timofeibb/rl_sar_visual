@@ -1,0 +1,8 @@
+Symlinking /home/tim/ROS/rl_sar_visual/devel/share/rl_sar/cmake/rl_sarConfig.cmake
+Symlinking /home/tim/ROS/rl_sar_visual/devel/share/rl_sar/cmake/rl_sarConfig-version.cmake
+Symlinking /home/tim/ROS/rl_sar_visual/devel/lib/librl_sdk.so
+Symlinking /home/tim/ROS/rl_sar_visual/devel/lib/libobservation_buffer.so
+Symlinking /home/tim/ROS/rl_sar_visual/devel/lib/pkgconfig/rl_sar.pc
+Symlinking /home/tim/ROS/rl_sar_visual/devel/lib/rl_sar/actuator_net.py
+Symlinking /home/tim/ROS/rl_sar_visual/devel/lib/rl_sar/rl_sim
+Symlinking /home/tim/ROS/rl_sar_visual/devel/lib/rl_sar/rl_real_a1

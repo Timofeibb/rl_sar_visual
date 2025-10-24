@@ -1,0 +1,8 @@
+prefix=/home/tim/ROS/rl_sar_visual/install
+
+Name: robot_msgs
+Description: Description of robot_msgs
+Version: 3.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime std_msgs geometry_msgs sensor_msgs

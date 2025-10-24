@@ -1,0 +1,50 @@
+[
+{
+  "directory": "/home/tim/ROS/rl_sar_visual/build/rl_sar",
+  "command": "/usr/bin/c++ -DBOOST_TEST_DYN_LINK -DCMAKE_CURRENT_SOURCE_DIR=\\\"/home/tim/ROS/rl_sar_visual/src/rl_sar\\\" -DLIBBULLET_VERSION=2.88 -DLIBBULLET_VERSION_GT_282 -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"rl_sar\\\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -Drl_sdk_EXPORTS -I/home/tim/ROS/rl_sar_visual/src/rl_sar/include -I/home/tim/ROS/rl_sar_visual/devel/.private/robot_msgs/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/matplotlibcpp -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/observation_buffer -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/rl_sdk -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/loop -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/fsm -I/home/tim/ROS/rl_sar_visual/src/rl_sar/policy -isystem /home/tim/ROS/libtorch/include -isystem /home/tim/ROS/libtorch/include/torch/csrc/api/include -isystem /usr/include/python3.8 -isystem /home/tim/.local/lib/python3.8/site-packages/numpy/core/include -g -std=gnu++14 -fPIC -g -D_GLIBCXX_USE_CXX11_ABI=1 -o CMakeFiles/rl_sdk.dir/library/core/rl_sdk/rl_sdk.cpp.o -c /home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/rl_sdk/rl_sdk.cpp",
+  "file": "/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/rl_sdk/rl_sdk.cpp",
+  "output": "CMakeFiles/rl_sdk.dir/library/core/rl_sdk/rl_sdk.cpp.o"
+},
+{
+  "directory": "/home/tim/ROS/rl_sar_visual/build/rl_sar",
+  "command": "/usr/bin/c++ -DBOOST_TEST_DYN_LINK -DCMAKE_CURRENT_SOURCE_DIR=\\\"/home/tim/ROS/rl_sar_visual/src/rl_sar\\\" -DLIBBULLET_VERSION=2.88 -DLIBBULLET_VERSION_GT_282 -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"rl_sar\\\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -Dobservation_buffer_EXPORTS -I/home/tim/ROS/rl_sar_visual/src/rl_sar/include -I/home/tim/ROS/rl_sar_visual/devel/.private/robot_msgs/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/matplotlibcpp -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/observation_buffer -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/rl_sdk -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/loop -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/fsm -I/home/tim/ROS/rl_sar_visual/src/rl_sar/policy -isystem /home/tim/ROS/libtorch/include -isystem /home/tim/ROS/libtorch/include/torch/csrc/api/include -g -std=gnu++14 -fPIC -g -D_GLIBCXX_USE_CXX11_ABI=1 -o CMakeFiles/observation_buffer.dir/library/core/observation_buffer/observation_buffer.cpp.o -c /home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/observation_buffer/observation_buffer.cpp",
+  "file": "/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/observation_buffer/observation_buffer.cpp",
+  "output": "CMakeFiles/observation_buffer.dir/library/core/observation_buffer/observation_buffer.cpp.o"
+},
+{
+  "directory": "/home/tim/ROS/rl_sar_visual/build/rl_sar",
+  "command": "/usr/bin/c++ -DBOOST_TEST_DYN_LINK -DCMAKE_CURRENT_SOURCE_DIR=\\\"/home/tim/ROS/rl_sar_visual/src/rl_sar\\\" -DLIBBULLET_VERSION=2.88 -DLIBBULLET_VERSION_GT_282 -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"rl_sar\\\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -I/home/tim/ROS/rl_sar_visual/src/rl_sar/include -I/home/tim/ROS/rl_sar_visual/devel/.private/robot_msgs/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/matplotlibcpp -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/observation_buffer -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/rl_sdk -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/loop -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/fsm -I/home/tim/ROS/rl_sar_visual/src/rl_sar/policy -isystem /home/tim/ROS/libtorch/include -isystem /home/tim/ROS/libtorch/include/torch/csrc/api/include -isystem /usr/include/python3.8 -isystem /home/tim/.local/lib/python3.8/site-packages/numpy/core/include -g -g -D_GLIBCXX_USE_CXX11_ABI=1 -o CMakeFiles/rl_sim.dir/src/rl_sim.cpp.o -c /home/tim/ROS/rl_sar_visual/src/rl_sar/src/rl_sim.cpp",
+  "file": "/home/tim/ROS/rl_sar_visual/src/rl_sar/src/rl_sim.cpp",
+  "output": "CMakeFiles/rl_sim.dir/src/rl_sim.cpp.o"
+},
+{
+  "directory": "/home/tim/ROS/rl_sar_visual/build/rl_sar",
+  "command": "/usr/bin/c++ -DBOOST_TEST_DYN_LINK -DCMAKE_CURRENT_SOURCE_DIR=\\\"/home/tim/ROS/rl_sar_visual/src/rl_sar\\\" -DLIBBULLET_VERSION=2.88 -DLIBBULLET_VERSION_GT_282 -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"rl_sar\\\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -I/home/tim/ROS/rl_sar_visual/src/rl_sar/include -I/home/tim/ROS/rl_sar_visual/devel/.private/robot_msgs/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/matplotlibcpp -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/observation_buffer -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/rl_sdk -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/loop -I/home/tim/ROS/rl_sar_visual/src/rl_sar/library/core/fsm -I/home/tim/ROS/rl_sar_visual/src/rl_sar/policy -isystem /home/tim/ROS/rl_sar_visual/src/rl_sar/library/thirdparty/unitree_legged_sdk-3.2/include -isystem /home/tim/ROS/libtorch/include -isystem /home/tim/ROS/libtorch/include/torch/csrc/api/include -isystem /usr/include/python3.8 -isystem /home/tim/.local/lib/python3.8/site-packages/numpy/core/include -g -g -D_GLIBCXX_USE_CXX11_ABI=1 -o CMakeFiles/rl_real_a1.dir/src/rl_real_a1.cpp.o -c /home/tim/ROS/rl_sar_visual/src/rl_sar/src/rl_real_a1.cpp",
+  "file": "/home/tim/ROS/rl_sar_visual/src/rl_sar/src/rl_real_a1.cpp",
+  "output": "CMakeFiles/rl_real_a1.dir/src/rl_real_a1.cpp.o"
+},
+{
+  "directory": "/home/tim/ROS/rl_sar_visual/build/rl_sar/gtest/googlemock",
+  "command": "/usr/bin/c++ -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_EXPORTS -I/usr/src/googletest/googlemock/include -I/usr/src/googletest/googlemock -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest -g -std=c++11 -fPIC -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -g -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /usr/src/googletest/googlemock/src/gmock-all.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock-all.cc",
+  "output": "gtest/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o"
+},
+{
+  "directory": "/home/tim/ROS/rl_sar_visual/build/rl_sar/gtest/googlemock",
+  "command": "/usr/bin/c++ -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_main_EXPORTS -isystem /usr/src/googletest/googlemock/include -isystem /usr/src/googletest/googlemock -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest -g -std=c++11 -fPIC -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -g -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /usr/src/googletest/googlemock/src/gmock_main.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock_main.cc",
+  "output": "gtest/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o"
+},
+{
+  "directory": "/home/tim/ROS/rl_sar_visual/build/rl_sar/gtest/googletest",
+  "command": "/usr/bin/c++ -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgtest_EXPORTS -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest -g -std=c++11 -fPIC -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -g -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /usr/src/googletest/googletest/src/gtest-all.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest-all.cc",
+  "output": "gtest/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o"
+},
+{
+  "directory": "/home/tim/ROS/rl_sar_visual/build/rl_sar/gtest/googletest",
+  "command": "/usr/bin/c++ -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgtest_main_EXPORTS -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest -g -std=c++11 -fPIC -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -g -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /usr/src/googletest/googletest/src/gtest_main.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest_main.cc",
+  "output": "gtest/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o"
+}
+]

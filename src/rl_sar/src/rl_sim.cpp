@@ -6,53 +6,11 @@
 #include "rl_sim.hpp"
 
 RL_Sim::RL_Sim()
-#if defined(USE_ROS2)
-    : rclcpp::Node("rl_sim_node")
-#endif
 {
-#if defined(USE_ROS1)
     this->ang_vel_type = "ang_vel_world";
     ros::NodeHandle nh;
     nh.param<std::string>("ros_namespace", this->ros_namespace, "");
     nh.param<std::string>("robot_name", this->robot_name, "");
-#elif defined(USE_ROS2)
-    this->ang_vel_type = "ang_vel_body";
-    this->ros_namespace = this->get_namespace();
-    // get params from param_node
-    param_client = this->create_client<rcl_interfaces::srv::GetParameters>("/param_node/get_parameters");
-    while (!param_client->wait_for_service(std::chrono::seconds(1)))
-    {
-        if (!rclcpp::ok()) {
-            std::cout << LOGGER::ERROR << "Interrupted while waiting for param_node service. Exiting." << std::endl;
-            return;
-        }
-        std::cout << LOGGER::WARNING << "Waiting for param_node service to be available..." << std::endl;
-    }
-    auto request = std::make_shared<rcl_interfaces::srv::GetParameters::Request>();
-    request->names = {"robot_name", "gazebo_model_name"};
-    // Use a timeout for the future
-    auto future = param_client->async_send_request(request);
-    auto status = rclcpp::spin_until_future_complete(this->get_node_base_interface(), future, std::chrono::seconds(5));
-    if (status == rclcpp::FutureReturnCode::SUCCESS)
-    {
-        auto result = future.get();
-        if (result->values.size() < 2)
-        {
-            std::cout << LOGGER::ERROR << "Failed to get all parameters from param_node" << std::endl;
-        }
-        else
-        {
-            this->robot_name = result->values[0].string_value;
-            this->gazebo_model_name = result->values[1].string_value;
-            std::cout << LOGGER::INFO << "Get param robot_name: " << this->robot_name << std::endl;
-            std::cout << LOGGER::INFO << "Get param gazebo_model_name: " << this->gazebo_model_name << std::endl;
-        }
-    }
-    else
-    {
-        std::cout << LOGGER::ERROR << "Failed to call param_node service" << std::endl;
-    }
-#endif
 
     // read params from yaml
     this->ReadYamlBase(this->robot_name);
@@ -76,16 +34,10 @@ RL_Sim::RL_Sim()
     torch::set_num_threads(4);
 
     // init robot
-#if defined(USE_ROS1)
     this->joint_publishers_commands.resize(this->params.num_of_dofs);
-#elif defined(USE_ROS2)
-    this->robot_command_publisher_msg.motor_command.resize(this->params.num_of_dofs);
-    this->robot_state_subscriber_msg.motor_state.resize(this->params.num_of_dofs);
-#endif
     this->InitOutputs();
     this->InitControl();
 
-#if defined(USE_ROS1)
     this->StartJointController(this->ros_namespace, this->params.joint_controller_names);
     // publisher
     for (int i = 0; i < this->params.num_of_dofs; ++i)
@@ -121,37 +73,6 @@ RL_Sim::RL_Sim()
     this->gazebo_pause_physics_client = nh.serviceClient<std_srvs::Empty>("/gazebo/pause_physics");
     this->gazebo_unpause_physics_client = nh.serviceClient<std_srvs::Empty>("/gazebo/unpause_physics");
     this->gazebo_reset_world_client = nh.serviceClient<std_srvs::Empty>("/gazebo/reset_world");
-#elif defined(USE_ROS2)
-    this->StartJointController(this->ros_namespace, this->params.joint_names);
-    // publisher
-    this->robot_command_publisher = this->create_publisher<robot_msgs::msg::RobotCommand>(
-        this->ros_namespace + "robot_joint_controller/command", rclcpp::SystemDefaultsQoS());
-
-    // subscriber
-    this->cmd_vel_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(
-        "/cmd_vel", rclcpp::SystemDefaultsQoS(),
-        [this] (const geometry_msgs::msg::Twist::SharedPtr msg) {this->CmdvelCallback(msg);}
-    );
-    this->joy_subscriber = this->create_subscription<sensor_msgs::msg::Joy>(
-        "/joy", rclcpp::SystemDefaultsQoS(),
-        [this] (const sensor_msgs::msg::Joy::SharedPtr msg) {this->JoyCallback(msg);}
-    );
-    this->gazebo_imu_subscriber = this->create_subscription<sensor_msgs::msg::Imu>(
-        "/imu", rclcpp::SystemDefaultsQoS(), [this] (const sensor_msgs::msg::Imu::SharedPtr msg) {this->GazeboImuCallback(msg);}
-    );
-    this->robot_state_subscriber = this->create_subscription<robot_msgs::msg::RobotState>(
-        this->ros_namespace + "robot_joint_controller/state", rclcpp::SystemDefaultsQoS(),
-        [this] (const robot_msgs::msg::RobotState::SharedPtr msg) {this->RobotStateCallback(msg);}
-    );
-
-    // service
-    this->gazebo_pause_physics_client = this->create_client<std_srvs::srv::Empty>("/pause_physics");
-    this->gazebo_unpause_physics_client = this->create_client<std_srvs::srv::Empty>("/unpause_physics");
-    this->gazebo_reset_world_client = this->create_client<std_srvs::srv::Empty>("/reset_world");
-
-    auto empty_request = std::make_shared<std_srvs::srv::Empty::Request>();
-    auto result = this->gazebo_reset_world_client->async_send_request(empty_request);
-#endif
 
     // loop
     this->loop_control = std::make_shared<LoopFunc>("loop_control", this->params.dt, std::bind(&RL_Sim::RobotControl, this));
@@ -192,7 +113,6 @@ RL_Sim::~RL_Sim()
 
 void RL_Sim::StartJointController(const std::string& ros_namespace, const std::vector<std::string>& names)
 {
-#if defined(USE_ROS1)
     pid_t pid0 = fork();
     if (pid0 == 0)
     {
@@ -206,64 +126,12 @@ void RL_Sim::StartJointController(const std::string& ros_namespace, const std::v
         execlp("sh", "sh", "-c", cmd.c_str(), nullptr);
         exit(1);
     }
-#elif defined(USE_ROS2)
-    const char* ros_distro = std::getenv("ROS_DISTRO");
-    std::string spawner = (ros_distro && std::string(ros_distro) == "foxy") ? "spawner.py" : "spawner";
-
-    std::filesystem::path tmp_path = std::filesystem::temp_directory_path() / "robot_joint_controller_params.yaml";
-    {
-        std::ofstream tmp_file(tmp_path);
-        if (!tmp_file)
-        {
-            throw std::runtime_error("Failed to create temporary parameter file");
-        }
-
-        tmp_file << "/robot_joint_controller:\n";
-        tmp_file << "    ros__parameters:\n";
-        tmp_file << "        joints:\n";
-        for (const auto& name : names)
-        {
-            tmp_file << "            - " << name << "\n";
-        }
-    }
-
-    pid_t pid = fork();
-    if (pid == 0)
-    {
-        std::string cmd = "ros2 run controller_manager " + spawner + " robot_joint_controller ";
-        cmd += "-p " + tmp_path.string() + " ";
-        // cmd += " > /dev/null 2>&1";  // Comment this line to see the output
-        execlp("sh", "sh", "-c", cmd.c_str(), nullptr);
-        exit(1);
-    }
-    else if (pid > 0)
-    {
-        int status;
-        waitpid(pid, &status, 0);
-
-        if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-        {
-            throw std::runtime_error("Failed to start joint controller");
-        }
-
-        std::filesystem::remove(tmp_path);
-    }
-    else
-    {
-        throw std::runtime_error("fork() failed");
-    }
-#endif
 }
 
 void RL_Sim::GetState(RobotState<double> *state)
 {
-#if defined(USE_ROS1)
     const auto &orientation = this->pose.orientation;
     const auto &angular_velocity = this->vel.angular;
-#elif defined(USE_ROS2)
-    const auto &orientation = this->gazebo_imu.orientation;
-    const auto &angular_velocity = this->gazebo_imu.angular_velocity;
-#endif
 
     state->imu.quaternion[0] = orientation.w;
     state->imu.quaternion[1] = orientation.x;
@@ -276,15 +144,9 @@ void RL_Sim::GetState(RobotState<double> *state)
 
     for (int i = 0; i < this->params.num_of_dofs; ++i)
     {
-#if defined(USE_ROS1)
         state->motor_state.q[i] = this->joint_positions[this->params.joint_controller_names[this->params.joint_mapping[i]]];
         state->motor_state.dq[i] = this->joint_velocities[this->params.joint_controller_names[this->params.joint_mapping[i]]];
         state->motor_state.tau_est[i] = this->joint_efforts[this->params.joint_controller_names[this->params.joint_mapping[i]]];
-#elif defined(USE_ROS2)
-        state->motor_state.q[i] = this->robot_state_subscriber_msg.motor_state[this->params.joint_mapping[i]].q;
-        state->motor_state.dq[i] = this->robot_state_subscriber_msg.motor_state[this->params.joint_mapping[i]].dq;
-        state->motor_state.tau_est[i] = this->robot_state_subscriber_msg.motor_state[this->params.joint_mapping[i]].tau_est;
-#endif
     }
 }
 
@@ -292,66 +154,39 @@ void RL_Sim::SetCommand(const RobotCommand<double> *command)
 {
     for (int i = 0; i < this->params.num_of_dofs; ++i)
     {
-#if defined(USE_ROS1)
         this->joint_publishers_commands[this->params.joint_mapping[i]].q = command->motor_command.q[i];
         this->joint_publishers_commands[this->params.joint_mapping[i]].dq = command->motor_command.dq[i];
         this->joint_publishers_commands[this->params.joint_mapping[i]].kp = command->motor_command.kp[i];
         this->joint_publishers_commands[this->params.joint_mapping[i]].kd = command->motor_command.kd[i];
         this->joint_publishers_commands[this->params.joint_mapping[i]].tau = command->motor_command.tau[i];
-#elif defined(USE_ROS2)
-        this->robot_command_publisher_msg.motor_command[this->params.joint_mapping[i]].q = command->motor_command.q[i];
-        this->robot_command_publisher_msg.motor_command[this->params.joint_mapping[i]].dq = command->motor_command.dq[i];
-        this->robot_command_publisher_msg.motor_command[this->params.joint_mapping[i]].kp = command->motor_command.kp[i];
-        this->robot_command_publisher_msg.motor_command[this->params.joint_mapping[i]].kd = command->motor_command.kd[i];
-        this->robot_command_publisher_msg.motor_command[this->params.joint_mapping[i]].tau = command->motor_command.tau[i];
-#endif
     }
 
-#if defined(USE_ROS1)
     for (int i = 0; i < this->params.num_of_dofs; ++i)
     {
         this->joint_publishers[this->params.joint_controller_names[i]].publish(this->joint_publishers_commands[i]);
     }
-#elif defined(USE_ROS2)
-    this->robot_command_publisher->publish(this->robot_command_publisher_msg);
-#endif
 }
 
 void RL_Sim::RobotControl()
 {
     if (this->control.current_keyboard == Input::Keyboard::R || this->control.current_gamepad == Input::Gamepad::RB_Y)
     {
-#if defined(USE_ROS1)
         std_srvs::Empty empty;
         this->gazebo_reset_world_client.call(empty);
-#elif defined(USE_ROS2)
-        auto empty_request = std::make_shared<std_srvs::srv::Empty::Request>();
-        auto result = this->gazebo_reset_world_client->async_send_request(empty_request);
-#endif
         this->control.current_keyboard = this->control.last_keyboard;
     }
     if (this->control.current_keyboard == Input::Keyboard::Enter || this->control.current_gamepad == Input::Gamepad::RB_X)
     {
         if (simulation_running)
         {
-#if defined(USE_ROS1)
             std_srvs::Empty empty;
             this->gazebo_pause_physics_client.call(empty);
-#elif defined(USE_ROS2)
-            auto empty_request = std::make_shared<std_srvs::srv::Empty::Request>();
-            auto result = this->gazebo_pause_physics_client->async_send_request(empty_request);
-#endif
             std::cout << std::endl << LOGGER::INFO << "Simulation Stop" << std::endl;
         }
         else
         {
-#if defined(USE_ROS1)
             std_srvs::Empty empty;
             this->gazebo_unpause_physics_client.call(empty);
-#elif defined(USE_ROS2)
-            auto empty_request = std::make_shared<std_srvs::srv::Empty::Request>();
-            auto result = this->gazebo_unpause_physics_client->async_send_request(empty_request);
-#endif
             std::cout << std::endl << LOGGER::INFO << "Simulation Start" << std::endl;
         }
         simulation_running = !simulation_running;
@@ -413,37 +248,18 @@ void RL_Sim::RobotControl()
     }
 }
 
-#if defined(USE_ROS1)
 void RL_Sim::ModelStatesCallback(const gazebo_msgs::ModelStates::ConstPtr &msg)
 {
     this->vel = msg->twist[2];
     this->pose = msg->pose[2];
 }
-#elif defined(USE_ROS2)
-void RL_Sim::GazeboImuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
-{
-    this->gazebo_imu = *msg;
-}
-#endif
 
-void RL_Sim::CmdvelCallback(
-#if defined(USE_ROS1)
-    const geometry_msgs::Twist::ConstPtr &msg
-#elif defined(USE_ROS2)
-    const geometry_msgs::msg::Twist::SharedPtr msg
-#endif
-)
+void RL_Sim::CmdvelCallback(const geometry_msgs::Twist::ConstPtr &msg)
 {
     this->cmd_vel = *msg;
 }
 
-void RL_Sim::JoyCallback(
-#if defined(USE_ROS1)
-    const sensor_msgs::Joy::ConstPtr &msg
-#elif defined(USE_ROS2)
-    const sensor_msgs::msg::Joy::SharedPtr msg
-#endif
-)
+void RL_Sim::JoyCallback(const sensor_msgs::Joy::ConstPtr &msg)
 {
     this->joy_msg = *msg;
 
@@ -491,19 +307,12 @@ void RL_Sim::JoyCallback(
     this->control.yaw = this->joy_msg.axes[3] * 1.5; // RX
 }
 
-#if defined(USE_ROS1)
 void RL_Sim::JointStatesCallback(const robot_msgs::MotorState::ConstPtr &msg, const std::string &joint_controller_name)
 {
     this->joint_positions[joint_controller_name] = msg->q;
     this->joint_velocities[joint_controller_name] = msg->dq;
     this->joint_efforts[joint_controller_name] = msg->tau_est;
 }
-#elif defined(USE_ROS2)
-void RL_Sim::RobotStateCallback(const robot_msgs::msg::RobotState::SharedPtr msg)
-{
-    this->robot_state_subscriber_msg = *msg;
-}
-#endif
 
 void RL_Sim::RunModel()
 {
@@ -539,9 +348,6 @@ void RL_Sim::RunModel()
         {
             output_dof_tau_queue.push(this->output_dof_tau);
         }
-
-        // this->TorqueProtect(this->output_dof_tau);
-        // this->AttitudeProtect(this->robot_state.imu.quaternion, 75.0f, 75.0f);
 
 #ifdef CSV_LOGGER
         torch::Tensor tau_est = torch::zeros({1, this->params.num_of_dofs});
@@ -592,13 +398,8 @@ void RL_Sim::Plot()
     {
         this->plot_real_joint_pos[i].erase(this->plot_real_joint_pos[i].begin());
         this->plot_target_joint_pos[i].erase(this->plot_target_joint_pos[i].begin());
-#if defined(USE_ROS1)
         this->plot_real_joint_pos[i].push_back(this->joint_positions[this->params.joint_controller_names[i]]);
         this->plot_target_joint_pos[i].push_back(this->joint_publishers_commands[i].q);
-#elif defined(USE_ROS2)
-        this->plot_real_joint_pos[i].push_back(this->robot_state_subscriber_msg.motor_state[i].q);
-        this->plot_target_joint_pos[i].push_back(this->robot_command_publisher_msg.motor_command[i].q);
-#endif
         plt::subplot(this->params.num_of_dofs, 1, i + 1);
         plt::named_plot("_real_joint_pos", this->plot_t, this->plot_real_joint_pos[i], "r");
         plt::named_plot("_target_joint_pos", this->plot_t, this->plot_target_joint_pos[i], "b");
@@ -608,25 +409,17 @@ void RL_Sim::Plot()
     plt::pause(0.01);
 }
 
-#if defined(USE_ROS1)
 void signalHandler(int signum)
 {
     ros::shutdown();
     exit(0);
 }
-#endif
 
 int main(int argc, char **argv)
 {
-#if defined(USE_ROS1)
     signal(SIGINT, signalHandler);
     ros::init(argc, argv, "rl_sar");
     RL_Sim rl_sar;
     ros::spin();
-#elif defined(USE_ROS2)
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<RL_Sim>());
-    rclcpp::shutdown();
-#endif
     return 0;
 }

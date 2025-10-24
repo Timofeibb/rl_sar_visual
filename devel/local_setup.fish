@@ -1,0 +1,1 @@
+/home/tim/ROS/rl_sar_visual/devel/.private/catkin_tools_prebuild/local_setup.fish
